@@ -5,56 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>jumbleM | Harmonized Travel</title>
     <link rel="stylesheet" href="../css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="../assets/Mobilelogo.svg">
 </head>
 <body class="is-jumbled">
     <main id="app-content">
         <nav class="navbar">
-        <div class="nav-container">
-            <div class="brand">
-            <svg viewBox="0 0 220 60" class="nav-logo-svg">
-                <text x="0" y="45" class="logo-text">
-                    <tspan class="char j-letter">Ju</tspan>
-                    <tspan dx="25" class="char m-letter">bleM</tspan>
-                </text>
-                <g class="sphere-group" transform="translate(42, 18)">
-                    <circle cx="15" cy="15" r="14" fill="#121212" />
-                    <rect class="beam b1" x="9" y="24" width="2" height="0" rx="1" fill="white" />
-                    <rect class="beam b2" x="14" y="24" width="2" height="0" rx="1" fill="white" />
-                    <rect class="beam b3" x="19" y="24" width="2" height="0" rx="1" fill="white" />
-                </g>
-            </svg>
-        </div>
+            <div class="nav-container">
+                <div class="brand">
+                    <svg viewBox="0 0 220 60" class="nav-logo-svg">
+                        <text x="0" y="45" class="logo-text">
+                            <tspan class="char j-letter">Ju</tspan>
+                            <tspan dx="25" class="char m-letter">bleM</tspan>
+                        </text>
+                        <g class="sphere-group" transform="translate(42, 18)">
+                            <circle cx="15" cy="15" r="14" fill="#121212" />
+                            <rect class="beam b1" x="9" y="24" width="2" height="0" rx="1" fill="white" />
+                            <rect class="beam b2" x="14" y="24" width="2" height="0" rx="1" fill="white" />
+                            <rect class="beam b3" x="19" y="24" width="2" height="0" rx="1" fill="white" />
+                        </g>
+                    </svg>
+                </div>
 
-        <input type="checkbox" id="menu-toggle" class="menu-toggle">
-        <label for="menu-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
+                <input type="checkbox" id="menu-toggle" class="menu-toggle">
+                <label for="menu-toggle" class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
 
-        <ul class="nav-links">
-            <li><a href="#" class="active">Home</a></li>
-            <li><a href="#">Discover</a></li>
-            <li><a href="#">Upload</a></li>
-            <li><a href="#">Account</a></li>
-        </ul>
-    </div>
-</nav>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#discovery">Discover</a></li> <li><a href="#">Upload</a></li>
+                    <li><a href="#">Account</a></li>
+                </ul>
+            </div>
+        </nav>
 
         <header class="hero">
             <div class="hero-text">
                 <h1 class="reveal-item">Your journey, <span class="highlight">harmonized.</span></h1>
-                <button class="cta-btn reveal-item">Start Exploring</button>
+                <a href="#discovery" class="cta-anchor">
+                    <button class="cta-btn reveal-item">Start Exploring</button>
+                </a>
             </div>
         </header>
 
-        <section class="discovery-section reveal-item">
+        <section id="discovery" class="discovery-section reveal-item">
             <div class="section-header">
                 <h2>Suggestions for your vibe</h2>
                 <p>Optimized to your music and mood.</p>
             </div>
+            
             <div class="card-grid">
                 <div class="card">
                     <div class="card-image music-vibe"></div>
@@ -63,6 +65,7 @@
                         <p>Whether you want to be detached from the everyday pace at a quiet retreat, or intend to join a rave—we align your music patterns to find the perfect tempo.</p>
                     </div>
                 </div>
+                
                 <div class="card">
                     <div class="card-image city-explore"></div>
                     <div class="card-content">
@@ -70,6 +73,7 @@
                         <p>Connect with like-minded users and explore places within your reach, tailored specifically to fit your time and cost factors.</p>
                     </div>
                 </div>
+                
                 <div class="card">
                     <div class="card-image connection"></div>
                     <div class="card-content">
@@ -85,17 +89,18 @@
         <div class="footer-container">
             <div class="footer-brand">
                 <svg viewBox="0 0 220 60" class="footer-logo-svg">
-                    <text x="0" y="45" fill="#1DB954" font-weight="900" font-size="34">Ju</text>
+                    <text x="0" y="45" fill="#52F7BC" font-weight="900" font-size="34">Ju</text>
                     <g transform="translate(42, 18)">
                         <circle cx="15" cy="15" r="14" fill="#121212" />
                         <rect x="9" y="8" width="2" height="14" rx="1" fill="white" />
                         <rect x="14" y="5" width="2" height="20" rx="1" fill="white" />
                         <rect x="19" y="8" width="2" height="14" rx="1" fill="white" />
                     </g>
-                    <text x="70" y="45" fill="#1DB954" font-weight="900" font-size="34">bleM</text>
+                    <text x="70" y="45" fill="#52F7BC" font-weight="900" font-size="34">bleM</text>
                 </svg>
                 <p>Harmonizing your world, one beat at a time.</p>
             </div>
+            
             <div class="footer-links">
                 <div class="footer-column">
                     <h4>Product</h4>
@@ -111,6 +116,7 @@
                 </div>
             </div>
         </div>
+
         <div class="footer-bottom">
             <div class="footer-bottom-content">
                 <p>&copy; 2026 jumbleM Inc. All rights reserved.</p>
@@ -122,6 +128,7 @@
             </div>
         </div>
     </footer>
+
     <script src="../js/script.js"></script>
 </body>
 </html>
