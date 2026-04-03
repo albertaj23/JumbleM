@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 150">
+  <style>
+    .j-green { fill: #1DB954; font-family: 'Inter', sans-serif; font-weight: 800; font-size: 80px; }
+    .peak { fill: white; opacity: 0; }
+  </style>
+  <text x="20" y="100" class="j-green">Ju</text>
+  <g transform="translate(130, 20)">
+    <circle cx="50" cy="50" r="48" fill="#222" />
+    <path class="peak p1" d="M25 75 L40 45 L55 75" />
+    <path class="peak p2" d="M40 75 L55 35 L70 75" />
+    <path class="peak p3" d="M55 75 L70 50 L85 75" />
+  </g>
+  <text x="240" y="100" class="j-green">bleM</text>
+</svg>
