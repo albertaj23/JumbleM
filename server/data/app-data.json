@@ -1,0 +1,70 @@
+{
+  "users": [
+    {
+      "id": "user-1775307291957",
+      "name": "Jennifer Hart",
+      "contact": "jennifer@gmail.com",
+      "nickname": "jenxmuz",
+      "category": "coastal unwind",
+      "createdAt": "2026-04-04T12:54:51.957Z",
+      "notificationsCount": 0,
+      "activities": [
+        {
+          "id": "activity-1775307311726-7s2v",
+          "type": "post",
+          "message": "Posted Midnight Frequency from Berlin, DE in night streets.",
+          "createdAt": "2026-04-04T12:55:11.726Z"
+        },
+        {
+          "id": "activity-1775307291957",
+          "type": "signup",
+          "message": "Joined JumbleM with the coastal unwind category.",
+          "createdAt": "2026-04-04T12:54:51.957Z"
+        }
+      ]
+    },
+    {
+      "id": "user-1775306832983",
+      "name": "Albert Fischer",
+      "contact": "albertfischer1047@gmail.com",
+      "nickname": "albertlistenz",
+      "category": "cafe calm",
+      "createdAt": "2026-04-04T12:47:12.984Z",
+      "notificationsCount": 0,
+      "activities": [
+        {
+          "id": "activity-1775306880250-ppwa",
+          "type": "post",
+          "message": "Posted Midnight Frequency from Berlin, DE in night streets.",
+          "createdAt": "2026-04-04T12:48:00.249Z"
+        },
+        {
+          "id": "activity-1775306832984",
+          "type": "signup",
+          "message": "Joined JumbleM with the cafe calm category.",
+          "createdAt": "2026-04-04T12:47:12.984Z"
+        }
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "id": "post-1775307311726",
+      "authorNickname": "jenxmuz",
+      "category": "night streets",
+      "songName": "Midnight Frequency",
+      "gpsLocation": "Berlin, DE",
+      "selfAssessment": "Reflective electronic drift",
+      "createdAt": "2026-04-04T12:55:11.726Z"
+    },
+    {
+      "id": "post-1775306880249",
+      "authorNickname": "albertlistenz",
+      "category": "night streets",
+      "songName": "Midnight Frequency",
+      "gpsLocation": "Berlin, DE",
+      "selfAssessment": "Reflective electronic drift",
+      "createdAt": "2026-04-04T12:48:00.249Z"
+    }
+  ]
+}

@@ -1,11 +1,114 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import useBrandAnimation from '../hooks/useBrandAnimation';
 import usePageStylesheets from '../hooks/usePageStylesheets';
+import { useUserSession } from '../context/UserSessionContext';
+
+const categoryOptions = [
+  'night streets',
+  'cafe calm',
+  'festival pulse',
+  'coastal unwind',
+  'city sprint'
+];
 
 function LoginPage() {
   usePageStylesheets(['/styles/login.css']);
   useBrandAnimation();
+  const location = useLocation();
+  const { currentUser, register, validateNickname, isLoadingUser } = useUserSession();
+
+  const [form, setForm] = useState({
+    name: '',
+    contact: '',
+    nickname: '',
+    category: categoryOptions[0]
+  });
+  const [nicknameStatus, setNicknameStatus] = useState({ state: 'idle', message: 'Pick a unique nickname.' });
+  const [submitState, setSubmitState] = useState({ status: 'idle', message: '' });
+
+  useEffect(() => {
+    if (!form.nickname.trim()) {
+      setNicknameStatus({ state: 'idle', message: 'Pick a unique nickname.' });
+      return;
+    }
+
+    const nickname = form.nickname.trim().toLowerCase().replace(/^@+/, '');
+
+    if (nickname.length < 3) {
+      setNicknameStatus({ state: 'error', message: 'Use at least 3 characters.' });
+      return;
+    }
+
+    if (!/^[a-z0-9_]+$/.test(nickname)) {
+      setNicknameStatus({ state: 'error', message: 'Use lowercase letters, numbers, or underscores only.' });
+      return;
+    }
+
+    let cancelled = false;
+    setNicknameStatus({ state: 'checking', message: 'Checking nickname...' });
+
+    const timer = window.setTimeout(() => {
+      validateNickname(nickname)
+        .then((result) => {
+          if (!cancelled) {
+            setNicknameStatus({
+              state: result.available ? 'success' : 'error',
+              message: result.message
+            });
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setNicknameStatus({ state: 'error', message: 'Nickname check is unavailable right now.' });
+          }
+        });
+    }, 300);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [form.nickname, validateNickname]);
+
+  const profileInitials = useMemo(() => {
+    if (!currentUser?.nickname) {
+      return 'JM';
+    }
+
+    return currentUser.nickname.slice(0, 2).toUpperCase();
+  }, [currentUser]);
+
+  const handleChange = (key) => (event) => {
+    setForm((current) => ({
+      ...current,
+      [key]: event.target.value
+    }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setSubmitState({ status: 'idle', message: '' });
+
+    if (nicknameStatus.state !== 'success') {
+      setSubmitState({ status: 'error', message: 'Please choose a unique nickname before continuing.' });
+      return;
+    }
+
+    try {
+      await register({
+        ...form,
+        nickname: form.nickname.trim().toLowerCase().replace(/^@+/, '')
+      });
+      setSubmitState({ status: 'success', message: 'Profile created and synced into your avatar.' });
+    } catch (error) {
+      setSubmitState({ status: 'error', message: error.message });
+    }
+  };
+
+  const showNotifications = location.hash === '#notifications';
 
   return (
     <>
@@ -13,67 +116,150 @@ function LoginPage() {
       <main className="login-shell">
         <section className="login-hero">
           <div className="hero-copy">
-            <span className="hero-chip">Front-end auth theme</span>
+            <span className="hero-chip">Live identity + notifications</span>
             <h1>Sign in to keep your world in sync.</h1>
-            <p>Carry your vibe across journeys, queue your soundtracks, and connect your favorite platforms in one place.</p>
+            <p>Register with your name, contact detail, unique nickname, and vibe tag. That identity now powers the avatar, notifications, and activity feed across the app.</p>
             <div className="hero-points">
               <div className="hero-point">
-                <span className="material-symbols-outlined">music_note</span>
-                <span>Provider connections for Spotify, Apple Music, and Google</span>
+                <span className="material-symbols-outlined">person</span>
+                <span>Unique nicknames are validated in real time before account creation.</span>
               </div>
               <div className="hero-point">
-                <span className="material-symbols-outlined">bolt</span>
-                <span>A gradient language pulled from the landing page transition</span>
+                <span className="material-symbols-outlined">sell</span>
+                <span>Your vibe tag is used to group you with similar users for activity and notifications.</span>
               </div>
               <div className="hero-point">
-                <span className="material-symbols-outlined">travel</span>
-                <span>One profile for discovery, mapping, and live sound sync</span>
+                <span className="material-symbols-outlined">history</span>
+                <span>Avatar click opens your saved profile and the latest activity generated by the site.</span>
               </div>
             </div>
           </div>
 
           <div className="login-card">
             <div className="card-header">
-              <p className="eyebrow">Welcome back</p>
-              <h2>Create your listening identity</h2>
-              <p className="card-copy">This is a front-end-only concept screen for onboarding and login flows.</p>
+              <p className="eyebrow">{currentUser ? 'Profile live' : 'Create account'}</p>
+              <h2>{currentUser ? `Welcome, ${currentUser.name}` : 'Create your listening identity'}</h2>
+              <p className="card-copy">
+                {currentUser
+                  ? 'Your profile is now stored in the backend and used for avatar identity, recent activity, and tag-based notifications.'
+                  : 'Add your details and reserve a nickname that nobody else can use.'}
+              </p>
             </div>
 
-            <form className="login-form">
+            <form className="login-form" onSubmit={handleSubmit}>
               <label className="field">
                 <span>Name</span>
-                <input type="text" placeholder="Your name" />
+                <input type="text" placeholder="Your name" value={form.name} onChange={handleChange('name')} />
               </label>
 
               <label className="field">
                 <span>Email or phone number</span>
-                <input type="text" placeholder="name@example.com or +91 98765 43210" />
+                <input
+                  type="text"
+                  placeholder="name@example.com or +91 98765 43210"
+                  value={form.contact}
+                  onChange={handleChange('contact')}
+                />
               </label>
 
-              <button type="button" className="primary-action">Continue</button>
+              <label className="field">
+                <span>Nickname</span>
+                <input
+                  type="text"
+                  placeholder="your_unique_handle"
+                  value={form.nickname}
+                  onChange={handleChange('nickname')}
+                />
+                <small className={`field-note ${nicknameStatus.state}`}>{nicknameStatus.message}</small>
+              </label>
+
+              <label className="field">
+                <span>Vibe tag</span>
+                <select className="field-select" value={form.category} onChange={handleChange('category')}>
+                  {categoryOptions.map((option) => (
+                    <option value={option} key={option}>{option}</option>
+                  ))}
+                </select>
+              </label>
+
+              <button type="submit" className="primary-action">
+                {currentUser ? 'Create another profile' : 'Continue'}
+              </button>
+              {submitState.message ? (
+                <p className={`form-status ${submitState.status}`}>{submitState.message}</p>
+              ) : null}
             </form>
 
-            <div className="divider">
-              <span>Connect a music profile</span>
-            </div>
-
-            <div className="provider-grid">
-              <button type="button" className="provider-btn spotify">
-                <span className="material-symbols-outlined">album</span>
-                <span>Connect Spotify</span>
-              </button>
-              <button type="button" className="provider-btn apple">
-                <span className="material-symbols-outlined">library_music</span>
-                <span>Connect Apple Music</span>
-              </button>
-              <button type="button" className="provider-btn google">
-                <span className="material-symbols-outlined">play_circle</span>
-                <span>Continue with Google</span>
-              </button>
-            </div>
-
-            <p className="legal-note">No back-end logic is connected yet. These controls are visual only for now.</p>
+            <p className="legal-note">Start the Express API with <code>npm run server</code> while Vite is running so profile data, activity, and notifications can persist.</p>
           </div>
+        </section>
+
+        <section className="profile-grid" id="notifications">
+          <article className="profile-card">
+            <div className="profile-top">
+              <div className="profile-avatar">
+                {currentUser?.picture ? <img src={currentUser.picture} alt={currentUser.name} className="profile-avatar-image" /> : profileInitials}
+              </div>
+              <div>
+                <span className="eyebrow">Profile snapshot</span>
+                <h2>{currentUser ? `@${currentUser.nickname}` : 'No active profile yet'}</h2>
+              </div>
+            </div>
+            {currentUser ? (
+              <div className="profile-details">
+                <div className="detail-row">
+                  <span>Name</span>
+                  <strong>{currentUser.name}</strong>
+                </div>
+                <div className="detail-row">
+                  <span>Contact</span>
+                  <strong>{currentUser.contact}</strong>
+                </div>
+                <div className="detail-row">
+                  <span>Vibe tag</span>
+                  <strong>{currentUser.category}</strong>
+                </div>
+                <div className="detail-row">
+                  <span>Notifications</span>
+                  <strong>{currentUser.notificationsCount}</strong>
+                </div>
+              </div>
+            ) : (
+              <div className="empty-profile">
+                <strong>No backend profile yet</strong>
+                <span>Create a profile above and it will appear here along with future site activity.</span>
+              </div>
+            )}
+          </article>
+
+          <article className={`activity-card${showNotifications ? ' highlighted' : ''}`}>
+            <div className="activity-header">
+              <div>
+                <span className="eyebrow">Recent activity</span>
+                <h2>{showNotifications ? 'Notifications opened' : 'Recent activity'}</h2>
+              </div>
+              {isLoadingUser ? <span className="activity-state">Loading...</span> : null}
+            </div>
+
+            {currentUser?.activities?.length ? (
+              <div className="activity-list">
+                {currentUser.activities.map((activity) => (
+                  <article className="activity-item" key={activity.id}>
+                    <div className={`activity-dot ${activity.type}`}></div>
+                    <div>
+                      <p>{activity.message}</p>
+                      <span>{new Date(activity.createdAt).toLocaleString()}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-profile">
+                <strong>No recent activity</strong>
+                <span>Once users in your tag group post, notifications and activity will appear here.</span>
+              </div>
+            )}
+          </article>
         </section>
       </main>
       <Footer />
